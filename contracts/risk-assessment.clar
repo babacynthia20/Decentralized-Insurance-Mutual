@@ -1,30 +1,37 @@
+;; Risk Assessment Contract
 
-;; title: risk-assessment
-;; version:
-;; summary:
-;; description:
+;; Data Maps
+(define-map risk-factors
+  { factor: (string-ascii 20) }
+  { weight: uint }
+)
 
-;; traits
-;;
+;; Public Functions
+(define-public (add-risk-factor (factor (string-ascii 20)) (weight uint))
+  (begin
+    (asserts! (is-eq tx-sender (var-get admin)) (err u403))
+    (map-set risk-factors
+      { factor: factor }
+      { weight: weight }
+    )
+    (ok true)
+  )
+)
 
-;; token definitions
-;;
+(define-public (calculate-premium (policy-id uint) (risk-score uint))
+  (let
+    (
+      (base-premium u1000)
+      (risk-multiplier (/ risk-score u100))
+    )
+    (ok (* base-premium (+ u1 risk-multiplier)))
+  )
+)
 
-;; constants
-;;
+(define-read-only (get-risk-factor (factor (string-ascii 20)))
+  (map-get? risk-factors { factor: factor })
+)
 
-;; data vars
-;;
-
-;; data maps
-;;
-
-;; public functions
-;;
-
-;; read only functions
-;;
-
-;; private functions
-;;
+;; Variables
+(define-data-var admin principal tx-sender)
 
