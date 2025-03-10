@@ -1,30 +1,52 @@
+;; Premium Pool Contract
 
-;; title: premium-pool
-;; version:
-;; summary:
-;; description:
+;; Data Maps
+(define-map premium-balances
+  { policy-id: uint }
+  { balance: uint }
+)
 
-;; traits
-;;
+;; Public Functions
+(define-public (deposit-premium (policy-id uint) (amount uint))
+  (let
+    (
+      (current-balance (default-to u0 (get balance (map-get? premium-balances { policy-id: policy-id }))))
+    )
+    (map-set premium-balances
+      { policy-id: policy-id }
+      { balance: (+ current-balance amount) }
+    )
+    (ok true)
+  )
+)
 
-;; token definitions
-;;
+(define-public (withdraw-premium (policy-id uint) (amount uint))
+  (let
+    (
+      (current-balance (default-to u0 (get balance (map-get? premium-balances { policy-id: policy-id }))))
+    )
+    (asserts! (>= current-balance amount) (err u401))
+    (map-set premium-balances
+      { policy-id: policy-id }
+      { balance: (- current-balance amount) }
+    )
+    (ok true)
+  )
+)
 
-;; constants
-;;
+(define-read-only (get-premium-balance (policy-id uint))
+  (default-to u0 (get balance (map-get? premium-balances { policy-id: policy-id })))
+)
 
-;; data vars
-;;
+;; Admin Functions
+(define-public (invest-funds (amount uint))
+  (begin
+    (asserts! (is-eq tx-sender (var-get admin)) (err u403))
+    ;; Simulating investment, in reality, this would interact with other contracts or external systems
+    (ok true)
+  )
+)
 
-;; data maps
-;;
-
-;; public functions
-;;
-
-;; read only functions
-;;
-
-;; private functions
-;;
+;; Variables
+(define-data-var admin principal tx-sender)
 

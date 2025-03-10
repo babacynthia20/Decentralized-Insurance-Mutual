@@ -9,3 +9,7 @@ P
  contracts/policy-management.clar,f/4/f497f0b6d8049e931c6f9b339cc01ad286eb9fea
 O
 tests/policy-management.test.ts,a/b/ab255fba8216eff272daf2ff23409f4f76fe4e85
+K
+contracts/premium-pool.clar,8/a/8a746b0a8fc5c141854d75c83d57af8f61884a6f
+J
+tests/premium-pool.test.ts,9/e/9e9a5b0c948d3f2e82b2bff92802c03c151c8e8e
